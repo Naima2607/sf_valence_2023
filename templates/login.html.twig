@@ -7,15 +7,15 @@
 
 {% block body %}
 	<section class="login container mt-4">
-
-		{% if error %}
-			<div class="alert alert-danger" role="alert">
-				{{ error.messageKey|trans(error.messageData, 'security') }}
-			</div>
-		{% endif %}
-
 		<form action="{{ path('app.login') }}" method="post" class="card p-3 w-50 mx-auto">
 			<h1 class="text-center">Se connecter</h1>
+
+			{% if error %}
+				<div class="alert alert-danger" role="alert">
+					{{ error.messageKey|trans(error.messageData, 'security') }}
+				</div>
+			{% endif %}
+
 			<div class="mb-3">
 				<label for="username" class="form-label">Email:</label>
 				<input class="form-control" type="email" id="username" name="_username" placeholder="john@exemple.com" value="{{ lastUsername }}">
@@ -26,7 +26,9 @@
 				<input type="password" id="password" name="_password" placeholder="S3CR3T" class="form-control">
 			</div>
 
-			<button type="submit" class="btn btn-primary">login</button>
+			<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+			<button type="submit" class="btn btn-primary">Se connecter</button>
 		</form>
 	</section>
 {% endblock %}
