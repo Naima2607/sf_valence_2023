@@ -18,7 +18,11 @@
 							<p class="card-text">{{ article.contenu }}</p>
 							<div class="d-flex justify-content-between">
 								<a href="{{ path('admin.article.update', {id: article.id}) }}" class="btn btn-warning">Modifier</a>
-
+								<form action="{{ path('admin.article.delete', {id: article.id}) }}" method="POST" onsubmit="return confirm('Êtes-vous sur de vouloir supprimer cet article ?')">
+									<input type="hidden" name="id" value="{{ article.id }}">
+									<input type="hidden" name="token" value="{{ csrf_token('delete' ~ article.id) }}">
+									<button type="submit" class="btn btn-danger">Supprimer</button>
+								</form>
 							</div>
 						</div>
 					</div>
