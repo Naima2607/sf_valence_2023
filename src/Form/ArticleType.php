@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class ArticleType extends AbstractType
@@ -28,6 +29,10 @@ class ArticleType extends AbstractType
                     'placeholder' => 'Contenu de votre article',
                     'rows' => 5,
                 ]
+            ])
+            ->add('actif', CheckboxType::class, [
+                'label' => 'Actif',
+                'required' => false,
             ]);
     }
 
