@@ -17,10 +17,16 @@
             display: block;
             border-radius: $border-radius;
             box-shadow: $box-shadow-blog-img;
+            height: 50%;
+            object-fit: cover;
         }
 
         &-content {
-            padding: 1em 2em;
+            padding: 2em 2em 1em;
+            height: calc(50% + 4em);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
     }
 }
