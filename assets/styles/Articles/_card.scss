@@ -28,5 +28,12 @@
             flex-direction: column;
             justify-content: space-between;
         }
+
+        &.tags {
+            .blog-card-content {
+                padding: 1em;
+                height: unset;
+            }
+        }
     }
 }
