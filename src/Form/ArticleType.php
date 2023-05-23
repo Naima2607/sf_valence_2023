@@ -3,9 +3,12 @@
 namespace App\Form;
 
 use App\Entity\Article;
+use App\Entity\Categorie;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Vich\UploaderBundle\Form\Type\VichImageType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -22,6 +25,19 @@ class ArticleType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Titre de votre article',
                 ]
+            ])
+            ->add('categories', EntityType::class, [
+                'class' => Categorie::class,
+                'choice_label' => 'titre',
+                'expanded' => false,
+                'multiple' => true,
+                'by_reference' => false,
+                'autocomplete' => true,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                        ->andWhere('c.actif = true')
+                        ->orderBy('c.titre', 'ASC');
+                },
             ])
             ->add('imageFile', VichImageType::class, [
                 'label' => 'Image:',
