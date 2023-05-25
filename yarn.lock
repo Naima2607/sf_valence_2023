@@ -2419,6 +2419,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"bootstrap-icons@npm:^1.10.5":
+  version: 1.10.5
+  resolution: "bootstrap-icons@npm:1.10.5"
+  checksum: f965a82e62b7b5969598f7dbdf4c3a17927c97bb788e14269962bca1aa1625d66eb6f5f98bbcda1dd2baabc4255f5d82d5c5785463c1d96d5cb6536c0873625b
+  languageName: node
+  linkType: hard
+
 "bootstrap@npm:^5.2.3":
   version: 5.2.3
   resolution: "bootstrap@npm:5.2.3"
@@ -5708,6 +5715,7 @@ __metadata:
     "@symfony/ux-autocomplete": "file:vendor/symfony/ux-autocomplete/assets"
     "@symfony/webpack-encore": "npm:^4.0.0"
     bootstrap: "npm:^5.2.3"
+    bootstrap-icons: "npm:^1.10.5"
     core-js: "npm:^3.23.0"
     jquery: "npm:^3.6.4"
     regenerator-runtime: "npm:^0.13.9"

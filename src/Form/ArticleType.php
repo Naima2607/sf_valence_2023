@@ -38,6 +38,7 @@ class ArticleType extends AbstractType
                         ->andWhere('c.actif = true')
                         ->orderBy('c.titre', 'ASC');
                 },
+                'required' => false,
             ])
             ->add('imageFile', VichImageType::class, [
                 'label' => 'Image:',
