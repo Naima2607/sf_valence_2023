@@ -10,3 +10,4 @@ App\Entity\Article:
         user: "@user*"
         categories: <numberBetween(1, 4)>x @categorie*
         createdAt: <generateDateTimeImmutable()>
+        imageFile: <uploadImageArticle()>

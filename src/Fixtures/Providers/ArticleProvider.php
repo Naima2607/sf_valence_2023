@@ -5,6 +5,7 @@ namespace App\Fixtures\Providers;
 use Faker\Factory;
 use Faker\Generator;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ArticleProvider
 {
@@ -25,8 +26,14 @@ class ArticleProvider
         return \DateTimeImmutable::createFromMutable($this->faker->dateTimeThisYear());
     }
 
-    public function uploadImageArticle(): File
+    public function uploadImageArticle(): UploadedFile
     {
         $files = glob(realpath(__DIR__ . '/Images/Articles/') . '/*.*');
+
+        $file = $files[array_rand($files)];
+
+        $imageFile = new File($file);
+
+        return new UploadedFile($imageFile, $imageFile->getFilename());
     }
 }
