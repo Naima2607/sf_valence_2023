@@ -26,4 +26,4 @@ when@test:
 
     liip_test_fixtures:
         cache_db:
-            sqlite: 'Liip\TestFixturesBundle\Service\DatabaseBackup\SqliteDatabaseBackup'
+            sqlite: 'Liip\TestFixturesBundle\Services\DatabaseBackup\SqliteDatabaseBackup'

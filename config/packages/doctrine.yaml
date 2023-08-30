@@ -21,7 +21,7 @@ when@test:
     doctrine:
         dbal:
             # "TEST_TOKEN" is typically set by ParaTest
-            dbname_suffix: "_test%env(default::TEST_TOKEN)%"
+            # dbname_suffix: "_test%env(default::TEST_TOKEN)%"
             # On définit l'utitilisation de SQLite pour les tests
             driver: pdo_sqlite
             # On définit le chemin de la base de données de test
