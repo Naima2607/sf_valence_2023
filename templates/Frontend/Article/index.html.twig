@@ -8,10 +8,13 @@
 {% block body %}
 	<section class="container mt-4">
 		<h1 class="text-center">Liste des articles</h1>
-		<div class="blog-list">
-			{% for article in articles %}
-				{% include 'Components/_card.html.twig' %}
-			{% endfor %}
+		<div class="row">
+			<aside class="col-md-3">
+				{% include 'Components/_form.html.twig' with { form } only %}
+			</aside>
+			<div class="col-md-9">
+				{% include 'Components/_articleList.html.twig' %}
+			</div>
 		</div>
 	</section>
 {% endblock %}

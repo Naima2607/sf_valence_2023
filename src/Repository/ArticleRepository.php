@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Article;
+use App\Search\SearchArticle;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -52,6 +53,35 @@ class ArticleRepository extends ServiceEntityRepository
         }
 
         return $query->orderBy('a.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findSearchArticle(SearchArticle $search): array
+    {
+        $query = $this->createQueryBuilder('a')
+            ->select('a', 'u', 'c')
+            ->innerJoin('a.user', 'u')
+            ->leftJoin('a.categories', 'c')
+            ->andWhere('a.actif = true');
+
+        if (!empty($search->getTitle())) {
+            $query->andWhere('a.titre LIKE :title')
+                ->setParameter('title', "%{$search->getTitle()}%");
+        }
+
+        if (!empty($search->getTags())) {
+            $query->andWhere('c.id IN (:tags)')
+                ->setParameter('tags', $search->getTags());
+        }
+
+        if (!empty($search->getAuthors())) {
+            $query->andWhere('u.id IN (:authors)')
+                ->setParameter('authors', $search->getAuthors());
+        }
+
+        return $query
+            ->orderBy('a.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
     }
