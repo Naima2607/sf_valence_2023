@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Article;
 use App\Search\SearchArticle;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
+use Knp\Component\Pager\Pagination\PaginationInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
@@ -17,8 +19,10 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 class ArticleRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+        private PaginatorInterface $paginator
+    ) {
         parent::__construct($registry, Article::class);
     }
 
@@ -57,7 +61,7 @@ class ArticleRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findSearchArticle(SearchArticle $search): array
+    public function findSearchArticle(SearchArticle $search): PaginationInterface
     {
         $query = $this->createQueryBuilder('a')
             ->select('a', 'u', 'c')
@@ -80,10 +84,17 @@ class ArticleRepository extends ServiceEntityRepository
                 ->setParameter('authors', $search->getAuthors());
         }
 
-        return $query
-            ->orderBy('a.createdAt', 'DESC')
-            ->getQuery()
-            ->getResult();
+        $query->orderBy('a.createdAt', 'DESC')
+            ->getQuery();
+
+        return $this->paginator->paginate(
+            // Requête DQL à ennvoyer en BDD
+            $query,
+            // Numéro de la page
+            $search->getPage(),
+            // Nombre d'éléments par page
+            6
+        );
     }
 
     //    /**
