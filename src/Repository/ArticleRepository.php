@@ -84,8 +84,7 @@ class ArticleRepository extends ServiceEntityRepository
                 ->setParameter('authors', $search->getAuthors());
         }
 
-        $query->orderBy('a.createdAt', 'DESC')
-            ->getQuery();
+        $query->getQuery();
 
         return $this->paginator->paginate(
             // Requête DQL à ennvoyer en BDD
@@ -93,7 +92,11 @@ class ArticleRepository extends ServiceEntityRepository
             // Numéro de la page
             $search->getPage(),
             // Nombre d'éléments par page
-            6
+            6,
+            [
+                'defaultSortFieldName' => ['a.createdAt'],
+                'defaultSortDirection' => 'desc'
+            ]
         );
     }
 
