@@ -8,8 +8,13 @@ import { debounce } from "lodash";
  * @property {HTMLElement} sortable - Element html with the sortable btn
  * @property {HTMLFormElement} form - Element html with the form filter
  * @property {HTMLElement} count - Element html with the total item
+ * @property {int} page - the number of the current page
  */
 export class Filter {
+    /**
+     * Constructor of the Filter class
+     * @param {HTMLElement} element - The parent HTMLElement of the page
+     */
     constructor(element) {
         if (element == null) {
             return;
@@ -21,6 +26,7 @@ export class Filter {
         this.form = element.querySelector('.js-filter-form');
         this.count = element.querySelector('.js-filter-count');
         this.page = parseInt(new URLSearchParams(window.location.search).get('page') || 1);
+        this.showMore = this.page === 1 && this.page < parseInt(this.content.dataset.totalPage);
         this.bindEvents();
     }
 
@@ -43,8 +49,18 @@ export class Filter {
             }
         }
 
+        if (this.showMore) {
+            this.pagination.innerHTML = `
+                <div class="text-center">
+                    <button class="btn btn-primary text-center">Voir plus</button>
+                </div>`;
+
+            this.pagination.querySelector('button').addEventListener('click', this.loadMore.bind(this));
+        } else {
+            this.pagination.addEventListener('click', clickEventListener);
+        }
+
         this.sortable.addEventListener('click', clickEventListener);
-        this.pagination.addEventListener('click', clickEventListener);
 
         this.form.querySelectorAll('input[type="text"]').forEach(input => {
             input.addEventListener('keyup', debounce(this.loadForm.bind(this), 300));
@@ -59,8 +75,9 @@ export class Filter {
      * Function for load ajax request and modify the content on the page
      * 
      * @param {string} url - url for the AJAX request
+     * @param {bool} append - If append the content or replace
      */
-    async loadUrl(url) {
+    async loadUrl(url, append = false) {
         this.showLoader();
         const params = new URLSearchParams(url.split('?')[1] || '');
         params.set('ajax', true);
@@ -70,10 +87,22 @@ export class Filter {
         if (response.status >= 200 && response.status < 300) {
             const data = await response.json();
 
-            this.content.innerHTML = data.content;
+            if (append) {
+                this.content.innerHTML += data.content;
+            } else {
+                this.content.innerHTML = data.content;
+            }
+
+            if (!this.showMore) {
+                this.pagination.innerHTML = data.pagination;
+            } else if (this.page >= data.totalPage) {
+                this.pagination.style.display = 'none';
+            } else {
+                this.pagination.style.display = 'block';
+            }
+
             this.sortable.innerHTML = data.sortable;
             this.count.innerHTML = data.count;
-            this.pagination.innerHTML = data.pagination;
 
             this.hideLoader();
             params.delete('ajax');
@@ -87,6 +116,7 @@ export class Filter {
      * Function for load all information on the form and send ajax request
      */
     async loadForm() {
+        this.page = 1;
         const data = new FormData(this.form);
         const url = new URL(this.form.getAttribute('action') || window.location.href);
         const params = new URLSearchParams();
@@ -97,6 +127,14 @@ export class Filter {
 
         return this.loadUrl(url.pathname + '?' + params.toString());
         //return this.loadUrl(`${url.pathname}?${params.toString()}`);
+    }
+
+    async loadMore(e) {
+        this.page++;
+        const url = new URL(window.location.href);
+        const params = new URLSearchParams(url.search);
+        params.set('page', this.page);
+        this.loadUrl(url.pathname + '?' + params.toString(), true);
     }
 
     /**

@@ -46,13 +46,15 @@ class ArticleController extends AbstractController
                 ]),
                 'count' => $this->renderView('Components/_count.html.twig', [
                     'articles' => $articles
-                ])
+                ]),
+                'totalPage' => ceil($articles->getTotalItemCount() / $articles->getItemNumberPerPage()),
             ]);
         }
 
         return $this->render('Frontend/Article/index.html.twig', [
             'articles' => $articles,
             'form' => $form,
+            'totalPage' => ceil($articles->getTotalItemCount() / $articles->getItemNumberPerPage()),
         ]);
     }
 
