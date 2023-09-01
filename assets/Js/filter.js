@@ -1,3 +1,5 @@
+import { debounce } from "lodash";
+
 /**
  * Class for filter article in AJAX
  * 
@@ -44,7 +46,11 @@ export class Filter {
         this.pagination.addEventListener('click', clickEventListener);
 
         this.form.querySelectorAll('input[type="text"]').forEach(input => {
-            input.addEventListener('keyup', this.loadForm.bind(this));
+            input.addEventListener('keyup', debounce(this.loadForm.bind(this), 300));
+        });
+
+        this.form.querySelectorAll('input[type="checkbox"]').forEach(input => {
+            input.addEventListener('change', debounce(this.loadForm.bind(this), 500));
         });
     }
 

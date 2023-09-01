@@ -5718,6 +5718,7 @@ __metadata:
     bootstrap-icons: "npm:^1.10.5"
     core-js: "npm:^3.23.0"
     jquery: "npm:^3.6.4"
+    lodash: "npm:^4.17.21"
     regenerator-runtime: "npm:^0.13.9"
     sass: "npm:^1.62.1"
     sass-loader: "npm:^13.2.2"
