@@ -20,6 +20,7 @@ export class Filter {
         this.sortable = element.querySelector('.js-filter-sortable');
         this.form = element.querySelector('.js-filter-form');
         this.count = element.querySelector('.js-filter-count');
+        this.page = parseInt(new URLSearchParams(window.location.search).get('page') || 1);
         this.bindEvents();
     }
 
@@ -60,6 +61,7 @@ export class Filter {
      * @param {string} url - url for the AJAX request
      */
     async loadUrl(url) {
+        this.showLoader();
         const params = new URLSearchParams(url.split('?')[1] || '');
         params.set('ajax', true);
 
@@ -73,6 +75,7 @@ export class Filter {
             this.count.innerHTML = data.count;
             this.pagination.innerHTML = data.pagination;
 
+            this.hideLoader();
             params.delete('ajax');
             history.replaceState({}, "", url.split('?')[0] + '?' + params.toString());
         } else {
@@ -94,5 +97,35 @@ export class Filter {
 
         return this.loadUrl(url.pathname + '?' + params.toString());
         //return this.loadUrl(`${url.pathname}?${params.toString()}`);
+    }
+
+    /**
+     * Show the loader element of the form
+     */
+    showLoader() {
+        this.form.classList.add('is-loading');
+        const loader = this.form.querySelector('.js-loading');
+
+        if (loader) {
+            loader.setAttribute('aria-hidden', false);
+            loader.style.display = "block";
+        }
+
+        return;
+    }
+
+    /**
+     * Hide the loader element of the form
+     */
+    hideLoader() {
+        this.form.classList.remove('is-loading');
+        const loader = this.form.querySelector('.js-loading');
+
+        if (loader) {
+            loader.setAttribute('aria-hidden', true);
+            loader.style.display = "none";
+        }
+
+        return;
     }
 }
